@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaclimb.music.dao.PlaySumMapper">
+    <resultMap id="BaseResultMap" type="com.javaclimb.music.domain.PlaySum" >
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="song_list_id" jdbcType="INTEGER" property="songListId"/>
+        <result column="play_count" jdbcType="INTEGER" property="playCount"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,song_list_id,play_count
+    </sql>
+
+    <insert id="insert" parameterType="com.javaclimb.music.domain.PlaySum">
+        insert into play_sum
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="songListId != null">
+                song_list_id,
+            </if>
+            <if test="playCount != null">
+                play_count,
+            </if>
+        </trim>
+        <trim prefix=" values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="songListId != null">
+                #{songListId},
+            </if>
+            <if test="playCount != null">
+                #{playCount},
+            </if>
+        </trim>        
+    </insert>
+    
+    <update id="update" parameterType="com.javaclimb.music.domain.PlaySum">
+        update play_sum
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="songListId != null">
+                song_list_id = #{songListId},
+            </if>
+            <if test="playCount != null">
+                play_count = #{playCount},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateSum" parameterType="com.javaclimb.music.domain.PlaySum">
+        update play_sum
+        <set>
+            play_count = play_count+1,
+        </set>
+        where user_id=#{userId} and song_list_id=#{songListId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from play_sum
+        where id=#{id}
+    </delete>
+
+    <select id="isadd" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from play_sum
+        where user_id=#{userId} and song_list_id=#{songListId}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from play_sum
+        where user_id=#{userId}
+        order by play_count desc limit 3
+    </select>
+
+    <select id="allPlaySum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from play_sum
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
